@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Monthsary! 💖</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: radial-gradient(circle, #2b0c1e 0%, #050508 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+            color: white;
+        }
+        .galaxy-card {
+            background: rgba(20, 10, 15, 0.95);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            width: 100%;
+            max-width: 380px;
+            padding: 25px 20px;
+            border-radius: 24px;
+            box-shadow: 0 0 30px rgba(255, 20, 147, 0.3);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+        h2 {
+            color: #ffb6c1;
+            margin-bottom: 12px;
+            font-size: 20px;
+            font-weight: 500;
+        }
+        p {
+            color: #ff94b8;
+            font-size: 13px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .input-box {
+            width: 100%;
+            padding: 12px;
+            border-radius: 50px;
+            border: 1px solid #ff758c;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            text-align: center;
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        .input-box::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .btn-galaxy {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 117, 140, 0.5);
+            transition: 0.2s;
+        }
+        .btn-galaxy:active {
+            transform: scale(0.96);
+        }
+        .hidden { display: none !important; }
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 12px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+
+        /* 4 Pics 1 Word Styling */
+        .grid-4pics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .grid-4pics img {
+            width: 100%;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 105, 180, 0.4);
+        }
+        .word-slots {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .slot {
+            width: 24px;
+            height: 28px;
+            border-bottom: 2px solid #ff758c;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .slot:hover {
+            background: rgba(255, 117, 140, 0.2);
+            border-radius: 4px;
+        }
+        .slot.space {
+            border-bottom: none;
+            width: 10px;
+            cursor: default;
+        }
+        .slot.space:hover {
+            background: none;
+        }
+        .letter-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .letter-btn {
+            background: rgba(255, 117, 140, 0.2);
+            border: 1px solid #ff758c;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .letter-btn:active {
+            background: #ff758c;
+        }
+        .letter-btn.used {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .hint-btn {
+            background: transparent;
+            border: 1px dashed #ffb6c1;
+            color: #ffb6c1;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: 0.2s;
+        }
+        .hint-btn:hover {
+            background: rgba(255, 182, 193, 0.1);
+        }
+
+        .custom-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 5, 8, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            border-radius: 24px;
+        }
+        .modal-content {
+            background: rgba(35, 15, 25, 0.95);
+            border: 1px solid #ff758c;
+            padding: 20px;
+            border-radius: 18px;
+            width: 85%;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255, 117, 140, 0.4);
+        }
+        .modal-content p {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .landscape-photo-container {
+            width: 100%;
+            height: 160px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 105, 180, 0.4);
+            background: #000;
+        }
+        .landscape-photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Love Battery Styles */
+        .battery-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ff758c;
+            border-radius: 12px;
+            height: 25px;
+            position: relative;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .battery-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff758c, #ff7eb3);
+            transition: width 0.4s ease-in-out;
+        }
+        .battery-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: Passcode Entry -->
+    <div class="galaxy-card" id="slide1">
+        <h2>🔒 Restricted Access</h2>
+        <p>Enter the secret passcode (Hint: The nickname your family calls you)</p>
+        <input type="password" id="passcodeInput" class="input-box" placeholder="Enter passcode...">
+        <div id="errorText" class="error-msg hidden">Incorrect passcode, try again, baby! </div>
+        <button class="btn-galaxy" onclick="checkPasscode()">Unlock Universe ✨</button>
+    </div>
+
+    <!-- SLIDE 2: Welcome / Intro -->
+    <div class="galaxy-card hidden" id="slide2">
+        <div style="font-size: 45px; margin: 10px 0;">🎮</div>
+        <p>Happy monthsary, my baby! Before you check my messages, let's play a quick mini-game first.</p>
+        <button class="btn-galaxy" onclick="nextSlide(2, 3)">Play My Mini-Game </button>
+    </div>
+
+    <!-- SLIDE 3: 4 Pics 1 Word Mini-Game 1 -->
+    <div class="galaxy-card hidden" id="slide3">
+        <h2>4 Pics 1 Word 🧩</h2>
+        <p style="font-size: 11px; margin-bottom: 4px;">Description: What coffee shop did we first meet in?</p>
+
+        <button class="hint-btn" onclick="showHint1()">💡 Get Hint (<span id="hintCount1">2</span> left)</button>
+        <div id="hintDisplay1" style="color: #ffb6c1; font-size: 11px; margin-bottom: 6px; font-style: italic; min-height: 16px;"></div>
+
+        <div class="grid-4pics">
+            <img src="SavanoPark_1st.png" alt="Savano Park 1">
+            <img src="coffee.png" alt="Coffee">
+            <img src="ButFirst_Heid.jpg" alt="But First Heid">
+            <img src="ButFirst_Sign.png" alt="But First Sign">
+        </div>
+
+        <div class="word-slots" id="wordSlots1">
+            <div class="slot" data-index="0" onclick="removeLetter1(0)"></div>
+            <div class="slot" data-index="1" onclick="removeLetter1(1)"></div>
+            <div class="slot" data-index="2" onclick="removeLetter1(2)"></div>
+            <div class="slot space"></div>
+            <div class="slot" data-index="4" onclick="removeLetter1(4)"></div>
+            <div class="slot" data-index="5" onclick="removeLetter1(5)"></div>
+            <div class="slot" data-index="6" onclick="removeLetter1(6)"></div>
+            <div class="slot" data-index="7" onclick="removeLetter1(7)"></div>
+            <div class="slot" data-index="8" onclick="removeLetter1(8)"></div>
+        </div>
+
+        <div class="letter-pool" id="letterPool1">
+            <button class="letter-btn" id="btn1-S" onclick="selectLetter1('S', 'btn1-S')">S</button>
+            <button class="letter-btn" id="btn1-T1" onclick="selectLetter1('T', 'btn1-T1')">T</button>
+            <button class="letter-btn" id="btn1-B" onclick="selectLetter1('B', 'btn1-B')">B</button>
+            <button class="letter-btn" id="btn1-I" onclick="selectLetter1('I', 'btn1-I')">I</button>
+            <button class="letter-btn" id="btn1-T2" onclick="selectLetter1('T', 'btn1-T2')">T</button>
+            <button class="letter-btn" id="btn1-F" onclick="selectLetter1('F', 'btn1-F')">F</button>
+            <button class="letter-btn" id="btn1-A" onclick="selectLetter1('A', 'btn1-A')">A</button>
+            <button class="letter-btn" id="btn1-R" onclick="selectLetter1('R', 'btn1-R')">R</button>
+            <button class="letter-btn" id="btn1-U" onclick="selectLetter1('U', 'btn1-U')">U</button>
+        </div>
+
+        <div id="gameMsg1" class="error-msg hidden">Wrong spelling, try again, baby </div>
+
+        <div id="customModal1" class="custom-modal hidden">
+            <div class="modal-content">
+                <p>Correct, my baby, Here's another one.</p>
+                <button class="btn-galaxy" onclick="proceedToSlide4()">Next ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: 4 Pics 1 Word Mini-Game (Part 2) -->
+    <div class="galaxy-card hidden" id="slide4">
+        <h2>4 Pics 1 Word (Part 2) 🧩</h2>
+        <p style="font-size: 11px; margin-bottom: 4px;">Description: The first mall we go to together.</p>
+
+        <button class="hint-btn" onclick="showHint2()">💡 Get Hint (<span id="hintCount2">2</span> left)</button>
+        <div id="hintDisplay2" style="color: #ffb6c1; font-size: 11px; margin-bottom: 6px; font-style: italic; min-height: 16px;"></div>
+
+        <div class="grid-4pics">
+            <img src="SmFairview_1.1.png" alt="SM Fairview 1">
+            <img src="SmFairview_1st.png" alt="SM Fairview 2">
+            <img src="SmFairview_2nd.png" alt="SM Fairview 3">
+            <img src="SmFairview_4th.png" alt="SM Fairview 4">
+        </div>
+
+        <div class="word-slots" id="wordSlots2">
+            <div class="slot" data-index="0" onclick="removeLetter2(0)"></div>
+            <div class="slot" data-index="1" onclick="removeLetter2(1)"></div>
+            <div class="slot space"></div>
+            <div class="slot" data-index="3" onclick="removeLetter2(3)"></div>
+            <div class="slot" data-index="4" onclick="removeLetter2(4)"></div>
+            <div class="slot" data-index="5" onclick="removeLetter2(5)"></div>
+            <div class="slot" data-index="6" onclick="removeLetter2(6)"></div>
+            <div class="slot" data-index="7" onclick="removeLetter2(7)"></div>
+            <div class="slot" data-index="8" onclick="removeLetter2(8)"></div>
+            <div class="slot" data-index="9" onclick="removeLetter2(9)"></div>
+            <div class="slot" data-index="10" onclick="removeLetter2(10)"></div>
+        </div>
+
+        <div class="letter-pool" id="letterPool2">
+            <button class="letter-btn" id="btn2-F" onclick="selectLetter2('F', 'btn2-F')">F</button>
+            <button class="letter-btn" id="btn2-I" onclick="selectLetter2('I', 'btn2-I')">I</button>
+            <button class="letter-btn" id="btn2-S1" onclick="selectLetter2('S', 'btn2-S1')">S</button>
+            <button class="letter-btn" id="btn2-A1" onclick="selectLetter2('A', 'btn2-A1')">A</button>
+            <button class="letter-btn" id="btn2-M1" onclick="selectLetter2('M', 'btn2-M1')">M</button>
+            <button class="letter-btn" id="btn2-V" onclick="selectLetter2('V', 'btn2-V')">V</button>
+            <button class="letter-btn" id="btn2-I2" onclick="selectLetter2('I', 'btn2-I2')">I</button>
+            <button class="letter-btn" id="btn2-E" onclick="selectLetter2('E', 'btn2-E')">E</button>
+            <button class="letter-btn" id="btn2-R" onclick="selectLetter2('R', 'btn2-R')">R</button>
+            <button class="letter-btn" id="btn2-A2" onclick="selectLetter2('A', 'btn2-A2')">A</button>
+            <button class="letter-btn" id="btn2-W" onclick="selectLetter2('W', 'btn2-W')">W</button>
+        </div>
+
+        <div id="gameMsg2" class="error-msg hidden">Wrong spelling, try again, baby </div>
+
+        <div id="customModal2" class="custom-modal hidden">
+            <div class="modal-content">
+                <p>Easy kase kaya nasagutan mo hehe galing, pakiss nga</p>
+                <button class="btn-galaxy" onclick="proceedToSlide5_from_modal()">Next ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Single Landscape Photo Memory -->
+    <div class="galaxy-card hidden" id="slide5">
+        <h2>Our Memories 📸</h2>
+        <div class="landscape-photo-container">
+          <img src="cute.png" alt="Our Cute Pictures">
+        </div>
+        <p>A short collection of our pictures, look at how happy we are every time we are together. miss na kita baby, every time na namimiss kita, nagtititingin lang ako sa gallery para makita mga pics natin hyssss I really miss you.</p>
+        <button class="btn-galaxy" onclick="nextSlide(5, 6)">Next ➔</button>
+    </div>
+
+    <!-- SLIDE 6: First Monthsary Milestone (Video) -->
+    <div class="galaxy-card hidden" id="slide6" style="height: auto; min-height: 520px; width: 360px;">
+        <h2>Our Video Compilation ✨</h2>
+        <video width="100%" height="360" controls autoplay muted style="border-radius: 12px; object-fit: cover; margin-top: 10px;">
+            <source src="1st_Vid.mp4" type="video/mp4">
+            Hindi suportado ng browser mo ang video.
+        </video>
+        <p style="font-size: 12px; margin-top: 10px;">Looking back at how we started makes me realize how lucky I am to have crossed paths with you.</p>
+        <button class="btn-galaxy" onclick="nextSlide(6, 7)">Next ➔</button>
+    </div>
+
+    <!-- SLIDE 7: Love Battery & Message Reveal -->
+    <div class="galaxy-card hidden" id="slide7">
+        <h2>Love Battery 🔋</h2>
+        <p id="batteryMsgText" style="font-size: 12px; min-height: 50px; margin-bottom: 10px;">
+            Click the charge button baby let's gooo
+        </p>
+
+        <!-- Battery Bar -->
+        <div class="battery-container">
+            <div class="battery-fill" id="batteryFill"></div>
+            <div class="battery-text" id="batteryPercent">0%</div>
+        </div>
+
+        <!-- Hidden Photo Section (Lilitaw pag 100%) -->
+        <div id="batteryPhotos" class="hidden" style="margin-bottom: 12px;">
+            <div class="landscape-photo-container" style="height: 130px; margin-bottom: 8px;">
+                <img src="cute.png" alt="Us">
+            </div>
+            <p style="font-size: 11px; color: #ffb6c1;">"100% Full na ang Love Battery ko sa'yo! I love you so much, lovie!"</p>
+        </div>
+
+        <button class="btn-galaxy" id="chargeBtn" onclick="chargeBattery()"> Click here babyyy ⚡</button>
+    </div>
+<!-- Dito nagtatapos ang buong Battery Card mo -->
+    </div> 
+
+    
+    <!-- ILAGAY MO DITO ANG VIDEO SLIDE -->
+    <div class="galaxy-card hidden" id="batteryVideoSlide" style="height: auto; min-height: 520px; width: 360px; margin: 0 auto; text-align: center;">
+        <h2>100% Fully Charged</h2>
+        
+        <video width="100%" height="360" controls autoplay muted style="border-radius: 12px; object-fit: cover; margin-top: 10px;">
+            <source src="2nd_Vid.mp4" type="video/mp4">
+            Hindi suportado ng browser mo ang video.
+        </video>
+
+        <p style="font-size: 12px; margin-top: 10px;"> Happy Monthdsary baby, I love you so muchhh</p>
+    </div>
+    <!-- Susunod na slide (Slide 8 o kung ano man ang sumunod) -->
+    <div class="galaxy-card hidden" id="slide8">
+        ...
+    </div>
+    <!-- SLIDE 8: Inside Jokes / Kakulitan -->
+    <div class="galaxy-card hidden" id="slide8">
+        <h2>Our Kakulitan 🤪</h2>
+        <div style="font-size: 50px; margin: 15px 0;">😜🤣</div>
+        <p>Thank you for matching my weird energy and for all the non-stop laughter we share every single day.</p>
+        <button class="btn-galaxy" onclick="nextSlide(8, 9)">Next ➔</button>
+    </div>
+
+    <!-- SLIDE 9: Future Goals Together -->
+    <div class="galaxy-card hidden" id="slide9">
+        <h2>Future Goals 🚀</h2>
+        <div style="font-size: 50px; margin: 15px 0;">🌍💫</div>
+        <p>Can't wait to achieve more milestones, travel to different places, and build more dreams by your side.</p>
+        <button class="btn-galaxy" onclick="nextSlide(9, 10)">Next ➔</button>
+    </div>
+
+    <!-- SLIDE 10: Main Love Letter / Core Message -->
+    <div class="galaxy-card hidden" id="slide10">
+        <h2>Happy Monthsary! 🎉</h2>
+        <div style="width: 100%; height: 140px; border-radius: 12px; overflow: hidden; margin-bottom: 12px; background: #000;">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=300" alt="Us" style="width:100%; height:100%; object-fit:cover;">
+        </div>
+        <p style="font-size: 12px; margin-bottom: 15px;">
+            "Happy monthsary, baby! Thank you for being my girlfriend, wife, misis, bff, and my kasangga sa kakulitan at the same time."
+        </p>
+        <button class="btn-galaxy" onclick="nextSlide(10, 11)">Final Slide ➔</button>
+    </div>
+
+    <!-- SLIDE 11: Outro & Replay -->
+    <div class="galaxy-card hidden" id="slide11">
+        <h2>The End? Never! 🌌</h2>
+        <div style="font-size: 50px; margin: 15px 0;">💖♾️</div>
+        <p>This is just the beginning of our endless galaxy. I love you so much, my pyong!</p>
+        <button class="btn-galaxy" onclick="location.reload()">Replay Universe 🔄</button>
+    </div>
+
+    <script>
+        function checkPasscode() {
+            const input = document.getElementById('passcodeInput').value.toLowerCase().trim();
+            if (input === 'pyong') {
+                document.getElementById('slide1').classList.add('hidden');
+                document.getElementById('slide2').classList.remove('hidden');
+            } else {
+                document.getElementById('errorText').classList.remove('hidden');
+            }
+        }
+
+        function nextSlide(current, next) {
+            document.getElementById('slide' + current).classList.add('hidden');
+            document.getElementById('slide' + next).classList.remove('hidden');
+        }
+
+        // --- LOVE BATTERY INTERACTIVE LOGIC ---
+        let batteryLevel = 0;
+        const batteryMessages = [
+    "0% - Running on empty, need your hug first.",
+    "10% - Waking up slowly...",
+    "20% - Thinking about you.",
+    "30% - System warming up.",
+    "40% - Halfway there, still lazy though.",
+    "50% - Energy levels rising because of your smile.",
+    "60% - Getting a bit more alert.",
+    "70% - Almost fully charged.",
+    "80% - Ready for whatever we're doing next.",
+    "90% - Just a tiny bit more...",
+    "100% - 100% Fully Charged, sana ma kiss ako plss. "
+];
+
+   function chargeBattery() {
+    batteryLevel += 10; // Bawat click, dagdag 10% (10 clicks para mapuno)
+    if (batteryLevel > 100) batteryLevel = 100;
+
+    // Update bar
+    document.getElementById('batteryFill').style.width = batteryLevel + '%';
+    document.getElementById('batteryPercent').innerText = batteryLevel + '%';
+
+    // Update text based on level (para sa 10% increments)
+    let msgIndex = Math.floor(batteryLevel / 10); 
+    if (msgIndex >= batteryMessages.length) msgIndex = batteryMessages.length - 1;
+    document.getElementById('batteryMsgText').innerText = batteryMessages[msgIndex];
+
+    // --- ANG PAGBABAGO DITO ---
+    // Pag nag 100% na, diretsong tawagin ang function para ilabas ang video
+    if (batteryLevel === 100) {
+        // Maghintay ng sandali (optional, para makita niyang 100% na)
+        setTimeout(finishBatterySlide, 800); 
+    }
+}
+
+function finishBatterySlide() {
+    // Itago ang buong card ng battery slide
+    document.getElementById('slide7').classList.add('hidden');
+    
+    // Direktang lumabas ang portrait video card
+    document.getElementById('batteryVideoSlide').classList.remove('hidden');
+}
+
+
+        // --- PUZZLE 1 LOGIC (BUT FIRST) ---
+        let currentAnswer1 = Array(9).fill(""); 
+        let usedButtons1 = {};
+        const targetWord1 = "BUTFIRST"; 
+        const targetIndices1 = [0, 1, 2, 4, 5, 6, 7, 8];
+        const slots1 = document.querySelectorAll('#wordSlots1 .slot:not(.space)');
+
+        let hintsLeft1 = 2;
+        const hintsList1 = [
+            "Hint 1: We meet after my class ☕",
+            "Hint 2: You act weird 😜"
+        ];
+
+        function showHint1() {
+            if (hintsLeft1 > 0) {
+                const idx = 2 - hintsLeft1;
+                document.getElementById('hintDisplay1').innerText = hintsList1[idx];
+                hintsLeft1--;
+                document.getElementById('hintCount1').innerText = hintsLeft1;
+            } else {
+                document.getElementById('hintDisplay1').innerText = "Wala nang hints, kaya mo na 'yan, baby! 💪";
+            }
+        }
+
+        function selectLetter1(letter, btnId) {
+            for (let i = 0; i < targetIndices1.length; i++) {
+                let slotIdx = targetIndices1[i];
+                if (currentAnswer1[slotIdx] === "") {
+                    currentAnswer1[slotIdx] = letter;
+                    usedButtons1[slotIdx] = btnId;
+                    document.getElementById(btnId).classList.add('used');
+                    updateSlotsUI1();
+
+                    if (isBoardFull1()) {
+                        validateAnswer1();
+                    }
+                    break;
+                }
+            }
+        }
+
+        function removeLetter1(slotIdx) {
+            if (slotIdx === 3) return;
+            if (currentAnswer1[slotIdx] !== "") {
+                let btnId = usedButtons1[slotIdx];
+                if (btnId) {
+                    document.getElementById(btnId).classList.remove('used');
+                    delete usedButtons1[slotIdx];
+                }
+                currentAnswer1[slotIdx] = "";
+                updateSlotsUI1();
+                document.getElementById('gameMsg1').classList.add('hidden');
+            }
+        }
+
+        function updateSlotsUI1() {
+            slots1.forEach((slot, idx) => {
+                let realIdx = parseInt(slot.getAttribute('data-index'));
+                slot.innerText = currentAnswer1[realIdx] || "";
+            });
+        }
+
+        function isBoardFull1() {
+            return targetIndices1.every(idx => currentAnswer1[idx] !== "");
+        }
+
+        function validateAnswer1() {
+            let formedWord = targetIndices1.map(idx => currentAnswer1[idx]).join("");
+            if (formedWord === targetWord1) {
+                document.getElementById('gameMsg1').classList.add('hidden');
+                document.getElementById('customModal1').classList.remove('hidden');
+            } else {
+                const card = document.getElementById('slide3');
+                card.classList.add('shake');
+                let msg = document.getElementById('gameMsg1');
+                msg.classList.remove('hidden');
+                setTimeout(() => { card.classList.remove('shake'); }, 400);
+            }
+        }
+
+        function proceedToSlide4() {
+            document.getElementById('customModal1').classList.add('hidden');
+            nextSlide(3, 4);
+        }
+
+        // --- PUZZLE 2 LOGIC (SM FAIRVIEW) ---
+        let currentAnswer2 = Array(11).fill(""); 
+        let usedButtons2 = {};
+        const targetWord2 = "SMFAIRVIEW"; 
+        const targetIndices2 = [0, 1, 3, 4, 5, 6, 7, 8, 9, 10]; 
+        const slots2 = document.querySelectorAll('#wordSlots2 .slot:not(.space)');
+
+        let hintsLeft2 = 2;
+        const hintsList2 = [
+            "Hint 1: Near Terraces",
+            "Hint 2: Near Millan and Euro Tower"
+        ];
+
+        function showHint2() {
+            if (hintsLeft2 > 0) {
+                const idx = 2 - hintsLeft2;
+                document.getElementById('hintDisplay2').innerText = hintsList2[idx];
+                hintsLeft2--;
+                document.getElementById('hintCount2').innerText = hintsLeft2;
+            } else {
+                document.getElementById('hintDisplay2').innerText = "Wala nang hints, kaya mo na 'to, baby! 💪";
+            }
+        }
+
+        function selectLetter2(letter, btnId) {
+            for (let i = 0; i < targetIndices2.length; i++) {
+                let slotIdx = targetIndices2[i];
+                if (currentAnswer2[slotIdx] === "") {
+                    currentAnswer2[slotIdx] = letter;
+                    usedButtons2[slotIdx] = btnId;
+                    document.getElementById(btnId).classList.add('used');
+                    updateSlotsUI2();
+
+                    if (isBoardFull2()) {
+                        validateAnswer2();
+                    }
+                    break;
+                }
+            }
+        }
+
+        function removeLetter2(slotIdx) {
+            if (slotIdx === 2) return;
+            if (currentAnswer2[slotIdx] !== "") {
+                let btnId = usedButtons2[slotIdx];
+                if (btnId) {
+                    document.getElementById(btnId).classList.remove('used');
+                    delete usedButtons2[slotIdx];
+                }
+                currentAnswer2[slotIdx] = "";
+                updateSlotsUI2();
+                document.getElementById('gameMsg2').classList.add('hidden');
+            }
+        }
+
+        function updateSlotsUI2() {
+            slots2.forEach((slot, idx) => {
+                let realIdx = parseInt(slot.getAttribute('data-index'));
+                slot.innerText = currentAnswer2[realIdx] || "";
+            });
+        }
+
+        function isBoardFull2() {
+            return targetIndices2.every(idx => currentAnswer2[idx] !== "");
+        }
+
+        function validateAnswer2() {
+            let formedWord = targetIndices2.map(idx => currentAnswer2[idx]).join("");
+            if (formedWord === targetWord2) {
+                document.getElementById('gameMsg2').classList.add('hidden');
+                document.getElementById('customModal2').classList.remove('hidden');
+            } else {
+                const card = document.getElementById('slide4');
+                card.classList.add('shake');
+                let msg = document.getElementById('gameMsg2');
+                msg.classList.remove('hidden');
+                setTimeout(() => { card.classList.remove('shake'); }, 400);
+            }
+        }
+
+        function proceedToSlide5_from_modal() {
+            document.getElementById('customModal2').classList.add('hidden');
+            nextSlide(4, 5);
+        }
+    </script>
+</body>
+</html>
