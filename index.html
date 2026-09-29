@@ -393,12 +393,12 @@
 
     <!-- SLIDE 6: First Monthsary Milestone (Video) -->
     <div class="galaxy-card hidden" id="slide6" style="height: auto; min-height: 520px; width: 360px;">
-        <h2>Our Video Compilation ✨</h2>
-        <video width="100%" height="360" controls autoplay muted style="border-radius: 12px; object-fit: cover; margin-top: 10px;">
+        <h2>Our Video Compilation </h2>
+        <video width="100%" height="360" controls preload="none" muted style="border-radius: 12px; object-fit: cover;">
             <source src="1st_Vid.mp4" type="video/mp4">
             Hindi suportado ng browser mo ang video.
         </video>
-        <p style="font-size: 12px; margin-top: 10px;">Looking back at how we started makes me realize how lucky I am to have crossed paths with you.</p>
+        <p style="font-size: 12px; margin-top: 10px;">Looking back at how we started makes me realize that it was a good decision to reply to your message on IG eme HAHAHA. seriously speaking I'm so grateful to have you in my life lovie. I love you so much</p>
         <button class="btn-galaxy" onclick="nextSlide(6, 7)">Next ➔</button>
     </div>
 
@@ -431,10 +431,10 @@
     
     <!-- ILAGAY MO DITO ANG VIDEO SLIDE -->
     <div class="galaxy-card hidden" id="batteryVideoSlide" style="height: auto; min-height: 520px; width: 360px; margin: 0 auto; text-align: center;">
-        <h2>100% Fully Charged</h2>
+        <h2> My social battery becomes 100% when I'm with you.</h2>
         
-        <video width="100%" height="360" controls autoplay muted style="border-radius: 12px; object-fit: cover; margin-top: 10px;">
-            <source src="2nd_Vid.mp4" type="video/mp4">
+        <video width="100%" height="360" controls preload="none" muted style="border-radius: 12px; object-fit: cover;">
+            <source src="2.2_Vid.mp4" type="video/mp4">
             Hindi suportado ng browser mo ang video.
         </video>
 
@@ -444,42 +444,7 @@
     <div class="galaxy-card hidden" id="slide8">
         ...
     </div>
-    <!-- SLIDE 8: Inside Jokes / Kakulitan -->
-    <div class="galaxy-card hidden" id="slide8">
-        <h2>Our Kakulitan 🤪</h2>
-        <div style="font-size: 50px; margin: 15px 0;">😜🤣</div>
-        <p>Thank you for matching my weird energy and for all the non-stop laughter we share every single day.</p>
-        <button class="btn-galaxy" onclick="nextSlide(8, 9)">Next ➔</button>
-    </div>
-
-    <!-- SLIDE 9: Future Goals Together -->
-    <div class="galaxy-card hidden" id="slide9">
-        <h2>Future Goals 🚀</h2>
-        <div style="font-size: 50px; margin: 15px 0;">🌍💫</div>
-        <p>Can't wait to achieve more milestones, travel to different places, and build more dreams by your side.</p>
-        <button class="btn-galaxy" onclick="nextSlide(9, 10)">Next ➔</button>
-    </div>
-
-    <!-- SLIDE 10: Main Love Letter / Core Message -->
-    <div class="galaxy-card hidden" id="slide10">
-        <h2>Happy Monthsary! 🎉</h2>
-        <div style="width: 100%; height: 140px; border-radius: 12px; overflow: hidden; margin-bottom: 12px; background: #000;">
-            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=300" alt="Us" style="width:100%; height:100%; object-fit:cover;">
-        </div>
-        <p style="font-size: 12px; margin-bottom: 15px;">
-            "Happy monthsary, baby! Thank you for being my girlfriend, wife, misis, bff, and my kasangga sa kakulitan at the same time."
-        </p>
-        <button class="btn-galaxy" onclick="nextSlide(10, 11)">Final Slide ➔</button>
-    </div>
-
-    <!-- SLIDE 11: Outro & Replay -->
-    <div class="galaxy-card hidden" id="slide11">
-        <h2>The End? Never! 🌌</h2>
-        <div style="font-size: 50px; margin: 15px 0;">💖♾️</div>
-        <p>This is just the beginning of our endless galaxy. I love you so much, my pyong!</p>
-        <button class="btn-galaxy" onclick="location.reload()">Replay Universe 🔄</button>
-    </div>
-
+    
     <script>
         function checkPasscode() {
             const input = document.getElementById('passcodeInput').value.toLowerCase().trim();
@@ -516,33 +481,25 @@
     batteryLevel += 10; // Bawat click, dagdag 10% (10 clicks para mapuno)
     if (batteryLevel > 100) batteryLevel = 100;
 
-    // Update bar
     document.getElementById('batteryFill').style.width = batteryLevel + '%';
     document.getElementById('batteryPercent').innerText = batteryLevel + '%';
 
-    // Update text based on level (para sa 10% increments)
     let msgIndex = Math.floor(batteryLevel / 10); 
     if (msgIndex >= batteryMessages.length) msgIndex = batteryMessages.length - 1;
     document.getElementById('batteryMsgText').innerText = batteryMessages[msgIndex];
 
-    // --- ANG PAGBABAGO DITO ---
-    // Pag nag 100% na, diretsong tawagin ang function para ilabas ang video
     if (batteryLevel === 100) {
-        // Maghintay ng sandali (optional, para makita niyang 100% na)
         setTimeout(finishBatterySlide, 800); 
     }
 }
 
 function finishBatterySlide() {
-    // Itago ang buong card ng battery slide
     document.getElementById('slide7').classList.add('hidden');
     
-    // Direktang lumabas ang portrait video card
     document.getElementById('batteryVideoSlide').classList.remove('hidden');
 }
 
 
-        // --- PUZZLE 1 LOGIC (BUT FIRST) ---
         let currentAnswer1 = Array(9).fill(""); 
         let usedButtons1 = {};
         const targetWord1 = "BUTFIRST"; 
@@ -552,7 +509,7 @@ function finishBatterySlide() {
         let hintsLeft1 = 2;
         const hintsList1 = [
             "Hint 1: We meet after my class ☕",
-            "Hint 2: You act weird 😜"
+            "Hint 2: You act weird "
         ];
 
         function showHint1() {
@@ -562,7 +519,7 @@ function finishBatterySlide() {
                 hintsLeft1--;
                 document.getElementById('hintCount1').innerText = hintsLeft1;
             } else {
-                document.getElementById('hintDisplay1').innerText = "Wala nang hints, kaya mo na 'yan, baby! 💪";
+                document.getElementById('hintDisplay1').innerText = "No more hints my baby, u can do it";
             }
         }
 
